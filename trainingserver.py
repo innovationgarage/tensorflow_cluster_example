@@ -9,8 +9,14 @@ import netifaces
 FLAGS = None
 
 def main(_):
-  hosts = FLAGS.hosts.split(",")
-
+  def addport(host):
+    if ':' not in host:
+      host = "%s:%s" % (host, FLAGS.default_port)
+    return host
+  
+  hosts = [addport(host) for host in FLAGS.hosts.split(",")]
+      
+  
   local_ips = set([netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr']
                    for iface in netifaces.interfaces()
                    if netifaces.AF_INET in netifaces.ifaddresses(iface)])
@@ -51,6 +57,12 @@ if __name__ == "__main__":
       type=int,
       default=1,
       help="Number of parameter servers"
+  )
+  parser.add_argument(
+      "--default_port",
+      type=int,
+      default=4711,
+      help="Default port number"
   )
   FLAGS, unparsed = parser.parse_known_args()
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
