@@ -16,7 +16,7 @@ def main(_):
                    if netifaces.AF_INET in netifaces.ifaddresses(iface)])
 
   task_ips = [host.split(":")[0] for host in hosts]
-  local_task_ip = local_ips.intersection(set(task_ips))[0]
+  local_task_ip = iter(local_ips.intersection(set(task_ips))).next()
   
   task_index = task_ips.index(local_task_ip)
 
