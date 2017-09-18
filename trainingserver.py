@@ -4,17 +4,21 @@ import argparse
 import sys
 
 import tensorflow as tf
+import netifaces
 
 FLAGS = None
 
 def main(_):
   hosts = FLAGS.hosts.split(",")
 
-  import os
-  with os.popen('ifconfig eth0 | grep "inet\ addr" | cut -d: -f2 | cut -d" " -f1') as f:
-      local_ip=f.read().strip()
+  local_ips = set([netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr']
+                   for iface in netifaces.interfaces()
+                   if netifaces.AF_INET in netifaces.ifaddresses(iface)])
 
-  task_index = [host.split(":")[0] for host in hosts].index(local_ip)
+  task_ips = [host.split(":")[0] for host in hosts]
+  local_task_ip = local_ips.intersection(set(task_ips))[0]
+  
+  task_index = task_ips.index(local_task_ip)
 
   ps_hosts = hosts[:FLAGS.ps_servers]
   worker_hosts = hosts[FLAGS.ps_servers:]
