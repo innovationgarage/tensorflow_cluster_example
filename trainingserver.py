@@ -5,7 +5,7 @@ import sys
 
 import tensorflow as tf
 import netifaces
-import socket
+import dns.resolver
 
 FLAGS = None
 
@@ -24,7 +24,9 @@ def main(_):
   local_ips.add("127.0.1.1") # Hack for debian
   
   task_ips = [host.split(":")[0] for host in hosts]
-  task_ips = [socket.gethostbyname(ip) for ip in task_ips]
+  task_ips = [record.address
+              for ip in task_ips
+              for record in dns.resolver.query(ip, 'A')]
   local_task_ip = iter(local_ips.intersection(set(task_ips))).next()
   
   task_index = task_ips.index(local_task_ip)
