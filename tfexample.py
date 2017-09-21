@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-with tf.Session('grpc://46.101.213.210:4711') as s:
+with tf.Session('grpc://localhost:4711') as s:
     with tf.device("/job:worker"):
         node1 = tf.constant(3.0, dtype=tf.float32)
         node2 = tf.constant(5.0, dtype=tf.float32)
