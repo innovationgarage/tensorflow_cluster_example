@@ -122,7 +122,7 @@ def cluster():
 @click.option('--base_port', default=5600)
 @click.option('--ps_tasks', default=1)
 def start(servers, base_port, ps_tasks):
-  start_cluster(servers, base_port, n_ps_tasks)
+  start_cluster(servers, base_port, ps_tasks)
 
 @cluster.command()
 @click.argument("servers")
