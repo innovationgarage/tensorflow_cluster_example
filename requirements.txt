@@ -1,0 +1,5 @@
+dnspython
+tensorflow
+netifaces
+click
+pieshell
