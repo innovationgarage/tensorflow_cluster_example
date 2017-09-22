@@ -13,8 +13,9 @@ import click
 FLAGS = None
 
 def run_server(spec, job_name, task_index):
-  print "Starting server /job:%s/task:%s as %s..." % (job_name, task_index, spec[job_name][task_index])
-  
+  sys.stderr.write("Starting server /job:%s/task:%s as %s...\n" % (job_name, task_index, spec[job_name][task_index]))
+  sys.stderr.flush()
+
   tf.train.Server(
     tf.train.ClusterSpec(spec),
     job_name=job_name,
